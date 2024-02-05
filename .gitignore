@@ -1,0 +1,10 @@
+npm-debug.log*
+.npm
+*.tgz
+.eslintcache
+coverage
+coverage.info
+test/fixtures/*/build
+node_modules
+lib/*
+.DS_Store

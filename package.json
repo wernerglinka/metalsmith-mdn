@@ -1,0 +1,73 @@
+{
+  "name": "metalsmith-mdn",
+  "version": "0.1.0",
+  "description": "MDN is a Metalsmith plugin that lets you use Nunjucks components in markdown content",
+  "keywords": [
+    "metalsmith-mdn",
+    "nunjucks components",
+    "metalsmith-plugin",
+    "metalsmith",
+    "static-site"
+  ],
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "type": "module",
+  "exports": {
+    "import": "./lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wernerglinka/metalsmith-mdn.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "author": "Werner Glinka (https://glinka.co)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wernerglinka/metalsmith-mdn/issues"
+  },
+  "homepage": "https://github.com/wernerglinka/metalsmith-mdn#readme",
+  "dependencies": {
+    "debug": "^4.3.4"
+  },
+  "devDependencies": {
+    "assert-dir-equal": "^1.1.0",
+    "auto-changelog": "^2.4.0",
+    "c8": "^8.0.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "metalsmith": "^2.6.2",
+    "microbundle": "^0.15.1",
+    "mocha": "^10.2.0",
+    "prettier": "^3.2.4",
+    "release-it": "^17.0.3"
+  },
+  "peerDependencies": {
+    "metalsmith": "^2.5.0"
+  },
+  "scripts": {
+    "changelog": "auto-changelog -u --commit-limit false --ignore-commit-pattern '^((dev|chore|ci):|Release)'",
+    "coverage": "npm test && c8 report --reporter=text-lcov > coverage.info",
+    "format": "prettier --write \"**/*.{yml,md,js,json}\"",
+    "format:check": "prettier --list-different \"**/*.{yml,md,js,json}\"",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint --fix-dry-run .",
+    "release": "npm run build && release-it .",
+    "build": "microbundle --target node -f cjs,esm --strict --generateTypes=false",
+    "prepack": "npm run build",
+    "test": "c8 mocha"
+  },
+  "engines": {
+    "node": ">=12.17.0 <13.0.0-0||>=13.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
