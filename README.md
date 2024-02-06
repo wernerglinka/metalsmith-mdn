@@ -94,9 +94,50 @@ Donec id elit non mi porta gravida at eget metus. Donec sed odio dui. Morbi leo 
 Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit. Vestibulum id ligula porta felis euismod semper.
 
 ```
-In addition to page related props, the `mySectionComponent` tag is used to include the `intro` section component. The `intro` section component is located in the `layouts/sections` directory and is defined in the `intro.njk` file.
+In addition to page related props, the `mySectionComponent` tag is used to include the `intro` section component. The `intro` section component is located in the `layouts/sections` directory and is defined in the `intro.njk` file. Note that the `intro` section component imports the `text` macro. 
+
+#### `layouts/sections/intro.njk`
+
+```nunjucks
+{% from "../partials/text.njk" import text %}
+
+<section class="section-intro>
+  <div class="content">
+    {% set info = params %}
+    {{ text(info.text) }}
+  </div>
+</section>
+```
+
+#### `layouts/partials/text.njk`
+
+```nunjucks
+{% macro text(info) %}
+
+  {% if info.title %}
+    {% if info.header === "h1" %}
+      <h1>{{ info.title }}</h1>
+    {% elif info.header === "h2" %}
+      <h2>{{ info.title }}</h2>
+    {% else %}
+      <h3>{{ info.title }}</h3>
+    {% endif %}
+  {% endif %}
+
+  {% if info.subTitle %}
+    <p class="sub-title">{{ info.subTitle }}</p>
+  {% endif %}
+
+  {% if info.prose %}
+    <div>{{ info.prose | mdToHTML | safe }}</div>
+  {% endif %}
+
+{% endmacro %}
+```
 
 #### `index.html`
+
+`index.md` below shows the transformed end result of the  file. The `intro` section component, populated with the props from the frontmatter is included in the markdown content.
 
 ```html
 <h1>Home page title</h1>
@@ -114,7 +155,6 @@ In addition to page related props, the `mySectionComponent` tag is used to inclu
 <p>Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit. Vestibulum id ligula porta felis euismod semper.</p>
 
 ```
-`index.md` shows the transformed end result of the  file. The `intro` section component, pupulated with the props from the frontmatter is included in the markdown content.
 
 
 ### Debug
