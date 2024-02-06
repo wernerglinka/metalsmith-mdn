@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include "sections/head.njk" %}
+  </head>
+</h1>
+
+<body class="{{ bodyClasses }}">
+  <div id="at-top"></div>
+  {% include "sections/header.njk" %}
+
+  <main data-barba="wrapper">
+    <div data-barba="container" data-barba-namespace="barbaPage">
+    {% block body %}
+      This is the default contents
+    {% endblock %}
+    </div>
+  </main>
+
+  {% include "sections/footer.njk" %}
+  {% include "partials/scripts.njk" %}
+
+</body>
+</html>

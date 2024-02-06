@@ -24,6 +24,7 @@ describe( 'metalsmith-mdn', function () {
 
   it( 'should not crash the metalsmith build when using default options', function ( done ) {
     Metalsmith( fixture( 'default' ) )
+      //.env( 'DEBUG', 'metalsmith-mdn*' )
       .use( plugin() )
       .build( ( err ) => {
         if ( err ) done( err );
@@ -35,10 +36,6 @@ describe( 'metalsmith-mdn', function () {
 
   it( 'should replace marker with nunjucks component', function ( done ) {
     Metalsmith( fixture( 'insertNunjucks' ) )
-      //.use( ( files, metalsmith, done ) => {
-      //console.log( metalsmith.directory() );
-      //done();
-      //} )
       //.env( 'DEBUG', 'metalsmith-mdn*' )
       .use( plugin( {
         templatesDir: "layouts",
@@ -51,4 +48,5 @@ describe( 'metalsmith-mdn', function () {
         done();
       } );
   } );
+
 } );
