@@ -137,7 +137,7 @@ In addition to page related props, the `mySectionComponent` tag is used to inclu
 
 #### `index.html`
 
-`index.md` below shows the transformed end result of the  file. The `intro` section component, populated with the props from the frontmatter is included in the markdown content.
+`index.html` below shows the transformed end result of the  file. The `intro` section component, populated with the props from the frontmatter is included in the markdown content.
 
 ```html
 <h1>Home page title</h1>
