@@ -33,7 +33,9 @@
   },
   "homepage": "https://github.com/wernerglinka/metalsmith-mdn#readme",
   "dependencies": {
-    "debug": "^4.3.4"
+    "debug": "^4.3.4",
+    "marked": "^12.0.0",
+    "nunjucks": "^3.2.4"
   },
   "devDependencies": {
     "assert-dir-equal": "^1.1.0",
