@@ -35,7 +35,10 @@ describe( 'metalsmith-mdn', function () {
 
   it( 'should replace marker with nunjucks component', function ( done ) {
     Metalsmith( fixture( 'insertNunjucks' ) )
-      .use( plugin() )
+      .use( plugin( {
+        templatesDir: "layouts",
+        customFilters: "nunjucks-filters.js",
+      } ) )
       .build( err => {
         if ( err ) done( err );
         assert.strictEqual( err, null );
