@@ -111,6 +111,8 @@ In addition to page related props, the `mySectionComponent` tag is used to inclu
   </div>    
 </section>
 
+<p>Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit. Vestibulum id ligula porta felis euismod semper.</p>
+
 ```
 `index.md` shows the transformed end result of the  file. The `intro` section component, pupulated with the props from the frontmatter is included in the markdown content.
 
