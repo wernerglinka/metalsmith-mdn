@@ -34,22 +34,22 @@
   "homepage": "https://github.com/wernerglinka/metalsmith-mdn#readme",
   "dependencies": {
     "debug": "^4.3.4",
-    "marked": "^12.0.0",
+    "marked": "^12.0.1",
     "nunjucks": "^3.2.4"
   },
   "devDependencies": {
     "assert-dir-equal": "^1.1.0",
     "auto-changelog": "^2.4.0",
-    "c8": "^8.0.1",
-    "eslint": "^8.56.0",
+    "c8": "^9.1.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
-    "metalsmith": "^2.6.2",
+    "metalsmith": "^2.6.3",
     "microbundle": "^0.15.1",
-    "mocha": "^10.2.0",
-    "prettier": "^3.2.4",
-    "release-it": "^17.0.3"
+    "mocha": "^10.4.0",
+    "prettier": "^3.2.5",
+    "release-it": "^17.1.1"
   },
   "peerDependencies": {
     "metalsmith": "^2.5.0"
