@@ -67,7 +67,7 @@
     "test": "c8 mocha"
   },
   "engines": {
-    "node": ">=12.17.0 <13.0.0-0||>=13.2.0"
+    "node": ">=18.0.0"
   },
   "publishConfig": {
     "access": "public"
