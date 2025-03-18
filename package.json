@@ -66,6 +66,7 @@
     "lint": "eslint --fix .",
     "lint:check": "eslint --fix-dry-run .",
     "release": "npm run build && release-it .",
+    "release:check": "npm run build && release-it . --dry-run",
     "build": "microbundle --target node -f cjs,esm --strict --generateTypes=false --output lib/index.js",
     "prepack": "npm run build",
     "test": "c8 mocha"

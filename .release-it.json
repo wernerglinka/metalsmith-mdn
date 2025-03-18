@@ -17,6 +17,6 @@
     "release": true,
     "releaseName": "metalsmith-mdn ${version}",
     "tokenRef": "GITHUB_TOKEN",
-    "assets": ["metalsmith-metalsmith-mdn-${version}.tgz"]
+    "assets": ["metalsmith-mdn-${version}.tgz"]
   }
 }
