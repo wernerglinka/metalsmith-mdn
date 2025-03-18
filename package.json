@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-mdn",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MDN is a Metalsmith plugin that lets you use Nunjucks components in markdown content",
   "type": "module",
   "keywords": [
