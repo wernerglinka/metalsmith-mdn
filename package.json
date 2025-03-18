@@ -70,7 +70,9 @@
     "release:check": "npm run build && node -r dotenv/config ./node_modules/.bin/release-it . --dry-run",
     "build": "microbundle --target node -f cjs,esm --strict --generateTypes=false --output lib/index.js",
     "prepack": "npm run build",
-    "test": "c8 mocha"
+    "test": "c8 mocha -t 5000",
+    "test:debug": "DEBUG=metalsmith-optimize-html:* npm test",
+    "test:e2e": "serve -l 3000 test/fixtures"
   },
   "engines": {
     "node": ">=18.0.0"
