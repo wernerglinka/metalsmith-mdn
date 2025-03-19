@@ -24,8 +24,7 @@ node_modules/
 jspm_packages/
 
 # Build outputs
-# We're keeping the /lib directory for users installing from GitHub
-# /lib/
+/lib/
 /dist/
 /build/
 
@@ -41,8 +40,8 @@ jspm_packages/
 # Optional REPL history
 .node_repl_history
 
-# We're keeping the .tgz files for release-it to use
-# *.tgz
+# .tgz files 
+*.tgz
 
 # dotenv environment variable files
 .env

@@ -13,6 +13,7 @@ If you are new to the concept of **section components**, you can read more about
 [![npm: version][npm-badge]][npm-url]
 [![license: MIT][license-badge]][license-url]
 [![test: coverage][coverage-badge]][coverage-url]
+[![ESM/CommonJS][modules-badge]][npm-url]
 
 ## Installation
 
@@ -224,6 +225,17 @@ To use this plugin with the Metalsmith CLI, add `metalsmith-mdn` to the `plugins
 - 100% test coverage with comprehensive test suite
 - Detailed error messaging for easier debugging
 
+## Test Coverage
+
+This project maintains high statement and line coverage for the source code. Coverage is verified during the release process using the c8 coverage tool.
+
+Coverage report (from latest test run):
+
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------|---------|----------|---------|---------|-------------------
+All files | 100 | 100 | 100 | 100 |
+ index.js | 100 | 100 | 100 | 100 |
+
 ## License
 
 [MIT](LICENSE)
@@ -235,4 +247,5 @@ To use this plugin with the Metalsmith CLI, add `metalsmith-mdn` to the `plugins
 [license-badge]: https://img.shields.io/github/license/wernerglinka/metalsmith-mdn
 [license-url]: LICENSE
 [coverage-badge]: https://img.shields.io/badge/test%20coverage-100%25-brightgreen
-[coverage-url]: #
+[coverage-url]: #test-coverage
+[modules-badge]: https://img.shields.io/badge/modules-ESM%2FCJS-blue

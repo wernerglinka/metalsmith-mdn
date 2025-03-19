@@ -60,19 +60,23 @@
     "metalsmith": "^2.5.0"
   },
   "scripts": {
+    "build": "microbundle --entry src/index.js --output lib/index.js --target node -f esm,cjs --strict --generateTypes=false",
     "changelog": "auto-changelog -u --commit-limit false --ignore-commit-pattern '^((dev|chore|ci):|Release)'",
-    "coverage": "npm test && c8 report --reporter=text-lcov > coverage.info",
+    "coverage": "npm test && c8 report --reporter=text-lcov > ./coverage.info",
     "format": "prettier --write \"**/*.{yml,md,js,json}\"",
     "format:check": "prettier --list-different \"**/*.{yml,md,js,json}\"",
     "lint": "eslint --fix .",
     "lint:check": "eslint --fix-dry-run .",
-    "release": "npm run build && node -r dotenv/config ./node_modules/.bin/release-it .",
-    "release:check": "npm run build && node -r dotenv/config ./node_modules/.bin/release-it . --dry-run",
-    "build": "microbundle --target node -f cjs,esm --strict --generateTypes=false --output lib/index.js",
-    "prepack": "npm run build",
-    "test": "c8 mocha -t 5000",
-    "test:debug": "DEBUG=metalsmith-optimize-html:* npm test",
-    "test:e2e": "serve -l 3000 test/fixtures"
+    "prepublishOnly": "npm run build",
+    "update-coverage": "node scripts/update-coverage-badge.js",
+    "prerelease": "npm run update-coverage && git add README.md && git commit -m \"Update coverage badge in README\" || true",
+    "release": "npm run build && GITHUB_TOKEN=$(grep GITHUB_TOKEN .env | cut -d '=' -f2) ./node_modules/.bin/release-it . ",
+    "release:check": "npm run lint:check && npm run build && GITHUB_TOKEN=$(grep GITHUB_TOKEN .env | cut -d '=' -f2) ./node_modules/.bin/release-it . --dry-run",
+    "test": "c8 --include=src/**/*.js mocha 'test/index.js' 'test/cjs.test.cjs' -t 15000",
+    "test:esm": "c8 --include=src/**/*.js mocha test/index.js -t 15000",
+    "test:cjs": "c8 --include=src/**/*.js mocha test/cjs.test.cjs -t 15000",
+    "test:e2e": "serve -l 3000 test/fixtures",
+    "depcheck": "depcheck"
   },
   "engines": {
     "node": ">=18.0.0"
