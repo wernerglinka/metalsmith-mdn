@@ -45,7 +45,9 @@ describe('metalsmith-mdn', function () {
     Metalsmith(fixture('noMarkers'))
       .use(plugin())
       .build((err) => {
-        if (err) {done(err);}
+        if (err) {
+          done(err);
+        }
         assert.strictEqual(err, null);
         equals(fixture('noMarkers/build'), fixture('noMarkers/expected'));
         done();
@@ -56,7 +58,9 @@ describe('metalsmith-mdn', function () {
     Metalsmith(fixture('invalidComponent'))
       .use(plugin())
       .build((err) => {
-        if (err) {done(err);}
+        if (err) {
+          done(err);
+        }
         assert.strictEqual(err, null);
         equals(fixture('invalidComponent/build'), fixture('invalidComponent/expected'));
         done();
@@ -67,7 +71,9 @@ describe('metalsmith-mdn', function () {
     Metalsmith(fixture('default'))
       .use(plugin())
       .build((err) => {
-        if (err) {done(err);}
+        if (err) {
+          done(err);
+        }
         assert.strictEqual(err, null);
         equals(fixture('default/build'), fixture('default/expected'));
         done();
@@ -83,7 +89,9 @@ describe('metalsmith-mdn', function () {
         })
       )
       .build((err) => {
-        if (err) {done(err);}
+        if (err) {
+          done(err);
+        }
         assert.strictEqual(err, null);
         equals(fixture('insertNunjucks/build'), fixture('insertNunjucks/expected'));
         done();
@@ -99,7 +107,9 @@ describe('metalsmith-mdn', function () {
         })
       )
       .build((err) => {
-        if (err) {done(err);}
+        if (err) {
+          done(err);
+        }
         try {
           // Read and normalize both files before comparison
           const buildContent = normalizeContent(readFileSync(fixture('multipleMarkers/build/index.md'), 'utf8'));
@@ -122,7 +132,9 @@ describe('metalsmith-mdn', function () {
         })
       )
       .build((err) => {
-        if (err) {done(err);}
+        if (err) {
+          done(err);
+        }
         try {
           const buildContent = normalizeContent(readFileSync(fixture('customFilters/build/index.md'), 'utf8'));
           const expectedContent = normalizeContent(readFileSync(fixture('customFilters/expected/index.md'), 'utf8'));
@@ -143,19 +155,18 @@ describe('metalsmith-mdn', function () {
 
   it('should handle MDN tags with special characters in component names', (done) => {
     // Create a test file with a component that has special characters in its name
-    const ms = Metalsmith(fixture('multipleMarkers'))
-      .metadata({
-        'special@component-name!': {
-          layout: 'sections/intro.njk',
-          text: {
-            title: 'Special Characters Test',
-            header: 'h2',
-            subTitle: '',
-            prose: 'This component has special characters in its name'
-          }
+    const ms = Metalsmith(fixture('multipleMarkers')).metadata({
+      'special@component-name!': {
+        layout: 'sections/intro.njk',
+        text: {
+          title: 'Special Characters Test',
+          header: 'h2',
+          subTitle: '',
+          prose: 'This component has special characters in its name'
         }
-      });
-    
+      }
+    });
+
     // Add a file with the special character component
     ms.source('src')
       .destination('build')
@@ -180,7 +191,9 @@ describe('metalsmith-mdn', function () {
         })
       )
       .build((err) => {
-        if (err) {done(err);}
+        if (err) {
+          done(err);
+        }
         try {
           // Check that the file was processed correctly
           const content = readFileSync(fixture('multipleMarkers/build/special.md'), 'utf8');
@@ -196,25 +209,23 @@ describe('metalsmith-mdn', function () {
 
   it('should handle large files with many MDN tags efficiently', (done) => {
     // Create a metalsmith instance
-    const ms = Metalsmith(fixture('multipleMarkers'))
-      .source('src')
-      .destination('build');
-    
+    const ms = Metalsmith(fixture('multipleMarkers')).source('src').destination('build');
+
     // Add a large file with many MDN tags
     ms.use((files) => {
       let content = '# Performance Test\n\n';
-      
+
       // Add 20 MDN tags for performance testing (reduced from 100 to make test more reliable)
       for (let i = 1; i <= 20; i++) {
         const componentName = `testComponent${i}`;
         content += `{#mdn "${componentName}"#}\n\n`;
-        
+
         // Add the component to the file metadata
         if (!files['index.md']) {
           done(new Error('index.md not found in files'));
           return;
         }
-        
+
         // Create component configuration
         files['index.md'][componentName] = {
           layout: 'sections/intro.njk',
@@ -226,61 +237,62 @@ describe('metalsmith-mdn', function () {
           }
         };
       }
-      
+
       // Create a new file with all the test components
       files['performance.md'] = {
         contents: Buffer.from(content),
         layout: files['index.md'].layout
       };
-      
+
       // Copy all test components to the new file
       for (let i = 1; i <= 20; i++) {
         const componentName = `testComponent${i}`;
         files['performance.md'][componentName] = files['index.md'][componentName];
       }
     });
-    
+
     // Measure execution time
     const startTime = process.hrtime.bigint();
-    
+
     ms.use(
-        plugin({
-          templatesDir: 'layouts',
-          customFilters: 'nunjucks-filters.js'
-        })
-      )
-      .build((err) => {
-        if (err) {done(err);}
-        try {
-          const endTime = process.hrtime.bigint();
-          const timeInMs = Number(endTime - startTime) / 1_000_000;
-          
-          // Check if the file was created
-          const performancePath = fixture('multipleMarkers/build/performance.md');
-          assert(readFileSync(performancePath, 'utf8'), 'Performance test file was not created');
-          
-          // Read the processed file
-          const content = readFileSync(performancePath, 'utf8');
-          
-          // Verify that components were processed (checking just a few)
-          assert(content.includes('Component 1'), 'Component 1 not found');
-          assert(content.includes('Component 10'), 'Component 10 not found');
-          assert(content.includes('This is test component 5'), 'Component 5 content not found');
-          assert(!content.includes('{#mdn "testComponent'), 'MDN tags were not processed');
-          
-          // Log processing time (helpful but not an assertion)
-          console.log(`Processed 20 MDN tags in ${timeInMs.toFixed(2)}ms`);
-          
-          // Make sure it completes in a reasonable time (more generous timing)
-          assert(timeInMs < 10000, `Processing took too long: ${timeInMs}ms`);
-          
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
+      plugin({
+        templatesDir: 'layouts',
+        customFilters: 'nunjucks-filters.js'
+      })
+    ).build((err) => {
+      if (err) {
+        done(err);
+      }
+      try {
+        const endTime = process.hrtime.bigint();
+        const timeInMs = Number(endTime - startTime) / 1_000_000;
+
+        // Check if the file was created
+        const performancePath = fixture('multipleMarkers/build/performance.md');
+        assert(readFileSync(performancePath, 'utf8'), 'Performance test file was not created');
+
+        // Read the processed file
+        const content = readFileSync(performancePath, 'utf8');
+
+        // Verify that components were processed (checking just a few)
+        assert(content.includes('Component 1'), 'Component 1 not found');
+        assert(content.includes('Component 10'), 'Component 10 not found');
+        assert(content.includes('This is test component 5'), 'Component 5 content not found');
+        assert(!content.includes('{#mdn "testComponent'), 'MDN tags were not processed');
+
+        // Log processing time (helpful but not an assertion)
+        console.log(`Processed 20 MDN tags in ${timeInMs.toFixed(2)}ms`);
+
+        // Make sure it completes in a reasonable time (more generous timing)
+        assert(timeInMs < 10000, `Processing took too long: ${timeInMs}ms`);
+
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
   });
-  
+
   it('should handle template not found errors gracefully', (done) => {
     // Create a metalsmith instance with a component referencing a non-existent template
     const ms = Metalsmith(fixture('multipleMarkers'))
@@ -305,20 +317,22 @@ describe('metalsmith-mdn', function () {
           customFilters: 'nunjucks-filters.js'
         })
       );
-    
+
     // The build should fail gracefully with a useful error
     ms.build((err) => {
       try {
         assert(err !== null, 'Should have thrown an error');
-        assert(err.message.includes('does-not-exist.njk') || err.message.includes('template not found'), 
-               'Error should mention the missing template');
+        assert(
+          err.message.includes('does-not-exist.njk') || err.message.includes('template not found'),
+          'Error should mention the missing template'
+        );
         done();
       } catch (error) {
         done(error);
       }
     });
   });
-  
+
   it('should handle custom filters import failure gracefully', (done) => {
     // Try to use a non-existent filters file
     Metalsmith(fixture('multipleMarkers'))
@@ -331,8 +345,10 @@ describe('metalsmith-mdn', function () {
       .build((err) => {
         try {
           assert(err !== null, 'Should have thrown an error');
-          assert(err.code === 'ERR_MODULE_NOT_FOUND' || err.message.includes('Cannot find module'),
-                 'Error should be about module not found');
+          assert(
+            err.code === 'ERR_MODULE_NOT_FOUND' || err.message.includes('Cannot find module'),
+            'Error should be about module not found'
+          );
           done();
         } catch (error) {
           done(error);

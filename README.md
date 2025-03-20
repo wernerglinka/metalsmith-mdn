@@ -42,14 +42,16 @@ import Metalsmith from 'metalsmith';
 import markdown from '@metalsmith/markdown';
 import MDN from 'metalsmith-mdn';
 
-Metalsmith( __dirname )
+Metalsmith(__dirname)
   // ...
-  .use( MDN( {
-    templatesDir: "layouts",
-    customFilters: "nunjucks-filters.js",
-  } ) )
-  .use( markdown() )
-  // ...
+  .use(
+    MDN({
+      templatesDir: 'layouts',
+      customFilters: 'nunjucks-filters.js'
+    })
+  )
+  .use(markdown());
+// ...
 ```
 
 ### CommonJS
@@ -59,17 +61,20 @@ const Metalsmith = require('metalsmith');
 const markdown = require('@metalsmith/markdown');
 const MDN = require('metalsmith-mdn');
 
-Metalsmith( __dirname )
+Metalsmith(__dirname)
   // ...
-  .use( MDN( {
-    templatesDir: "layouts",
-    customFilters: "nunjucks-filters.js",
-  } ) )
-  .use( markdown() )
-  // ...
+  .use(
+    MDN({
+      templatesDir: 'layouts',
+      customFilters: 'nunjucks-filters.js'
+    })
+  )
+  .use(markdown());
+// ...
 ```
 
 The plugin supports both ESM and CommonJS usage through dual package exporting. When published, it includes both formats:
+
 - ESM (`lib/index.js`): Used by default when importing in an ESM context
 - CommonJS (`lib/index.cjs`): Used when requiring in a CommonJS context
 
@@ -77,9 +82,9 @@ The package follows the standard Metalsmith plugin structure with source code in
 
 ### Options
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `templatesDir` | `layouts` | The directory where your Nunjucks templates are stored, relative to the Metalsmith root |
+| Option          | Default               | Description                                                                             |
+| --------------- | --------------------- | --------------------------------------------------------------------------------------- |
+| `templatesDir`  | `layouts`             | The directory where your Nunjucks templates are stored, relative to the Metalsmith root |
 | `customFilters` | `nunjucks-filters.js` | The filename of a custom Nunjucks filter file, located in the Metalsmith root directory |
 
 ### Example
@@ -231,10 +236,10 @@ This project maintains high statement and line coverage for the source code. Cov
 
 Coverage report (from latest test run):
 
-File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
-----------|---------|----------|---------|---------|-------------------
-All files | 100 | 100 | 100 | 100 |
- index.js | 100 | 100 | 100 | 100 |
+| File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |
+| --------- | ------- | -------- | ------- | ------- | ----------------- |
+| All files | 100     | 100      | 100     | 100     |
+| index.js  | 100     | 100      | 100     | 100     |
 
 ## License
 

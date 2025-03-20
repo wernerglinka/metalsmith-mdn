@@ -21,8 +21,8 @@ const defaults = {
  * @param {Options} [options]
  * @returns {Object}
  */
-const normalizeOptions = ( options ) => {
-  return { ...defaults, ...( options || {} ) };
+const normalizeOptions = (options) => {
+  return { ...defaults, ...(options || {}) };
 };
 
 /**
@@ -36,30 +36,30 @@ const normalizeOptions = ( options ) => {
  *     files frontmatter. Push the component properties to mdnTagsArray and when done
  *     return mdnTagsArray.
  */
-function getMDNTags( fileObj, debugFn ) {
+function getMDNTags(fileObj, debugFn) {
   const mdnTagsArray = [];
   const str = fileObj.contents.toString();
 
   // scan for MDN tags in the file content
-  const mdnTags = str.match( /\{#mdn\s*".+?"\s*#\}/g );
+  const mdnTags = str.match(/\{#mdn\s*".+?"\s*#\}/g);
 
   // if the file content contains any MDN tags construct mdnTagsArray
-  if ( mdnTags?.length ) {
-    for ( const marker of mdnTags ) {
+  if (mdnTags?.length) {
+    for (const marker of mdnTags) {
       // extract the name of the MDN component
-      const componentName = marker.replaceAll( ' ', '' ).replace( `${ MARKER_START }"`, '' ).replace( `"${ MARKER_END }`, '' );
+      const componentName = marker.replaceAll(' ', '').replace(`${MARKER_START}"`, '').replace(`"${MARKER_END}`, '');
 
       // find the component properties in the files metadata
       // `fileObj` should have a property that matches `componentName`
-      if ( fileObj?.[ componentName ] ) {
+      if (fileObj?.[componentName]) {
         // add the marker to the MDNTags array
-        fileObj[ componentName ].marker = marker;
+        fileObj[componentName].marker = marker;
 
         // push the component properties to mdnTagsArray
-        mdnTagsArray.push( fileObj[ componentName ] );
+        mdnTagsArray.push(fileObj[componentName]);
       } else {
         // Warning about missing component
-        debugFn?.( `Component named ${ componentName } could not be found` );
+        debugFn?.(`Component named ${componentName} could not be found`);
       }
     }
   }
@@ -77,16 +77,16 @@ function getMDNTags( fileObj, debugFn ) {
  *  to render.
  *  This is a helper function to avoid the callback function.
  */
-const renderTemplate = ( template, context ) => {
-  return new Promise( ( resolve, reject ) => {
-    nunjucks.render( template, context, ( err, result ) => {
-      if ( err ) {
-        reject( err );
+const renderTemplate = (template, context) => {
+  return new Promise((resolve, reject) => {
+    nunjucks.render(template, context, (err, result) => {
+      if (err) {
+        reject(err);
       } else {
-        resolve( result );
+        resolve(result);
       }
-    } );
-  } );
+    });
+  });
 };
 
 /**
@@ -98,12 +98,12 @@ const renderTemplate = ( template, context ) => {
  * Wrapper for the renderTemplate function. This function returns a promise that
  * resolves to the result of the renderTemplate function.
  */
-const resolveMDNComponent = async ( mdnTagObject, debugFn ) => {
+const resolveMDNComponent = async (mdnTagObject, debugFn) => {
   try {
-    return await renderTemplate( mdnTagObject.layout, { params: mdnTagObject } );
-  } catch ( err ) {
+    return await renderTemplate(mdnTagObject.layout, { params: mdnTagObject });
+  } catch (err) {
     // Log error using debug function if available
-    debugFn?.( `Error rendering component ${ mdnTagObject.layout }: ${ err.message }` );
+    debugFn?.(`Error rendering component ${mdnTagObject.layout}: ${err.message}`);
     throw err;
   }
 };
@@ -117,32 +117,32 @@ const resolveMDNComponent = async ( mdnTagObject, debugFn ) => {
  * @param {Options} options
  * @returns {import('metalsmith').Plugin}
  */
-function MDN( options ) {
-  options = normalizeOptions( options );
+function MDN(options) {
+  options = normalizeOptions(options);
 
-  return async function MDN( files, metalsmith, done ) {
-    const debug = metalsmith.debug( 'metalsmith-mdn' );
-    debug( 'Running with options: %O', options );
+  return async function MDN(files, metalsmith, done) {
+    const debug = metalsmith.debug('metalsmith-mdn');
+    debug('Running with options: %O', options);
 
     try {
       // Configure nunjucks environment
-      const env = nunjucks.configure( options.templatesDir, { autoescape: true } );
+      const env = nunjucks.configure(options.templatesDir, { autoescape: true });
 
       // Add custom filters
-      const customFilters = await import( path.join( metalsmith.directory(), options.customFilters ) );
-      Object.entries( customFilters ).forEach( ( [ name, filter ] ) => {
-        env.addFilter( name, filter );
-      } );
+      const customFilters = await import(path.join(metalsmith.directory(), options.customFilters));
+      Object.entries(customFilters).forEach(([name, filter]) => {
+        env.addFilter(name, filter);
+      });
 
-      const debugFn = metalsmith.debug( 'metalsmith-mdn' );
+      const debugFn = metalsmith.debug('metalsmith-mdn');
 
       // Collect all files and their MDN tags
-      const filesToProcess = Object.entries( files )
-        .map( ( [ filename, file ] ) => {
-          const MDNTags = getMDNTags( file, debugFn );
+      const filesToProcess = Object.entries(files)
+        .map(([filename, file]) => {
+          const MDNTags = getMDNTags(file, debugFn);
           return MDNTags.length ? { filename, MDNTags } : null;
-        } )
-        .filter( Boolean );
+        })
+        .filter(Boolean);
 
       /**
        * Parallel file processing: All files containing MDN tags are processed concurrently using
@@ -150,43 +150,41 @@ function MDN( options ) {
        * time rather than sequentially.
        */
       const processedFiles = await Promise.all(
-        filesToProcess.map( async ( { filename, MDNTags } ) => {
+        filesToProcess.map(async ({ filename, MDNTags }) => {
           // Process all MDN tags for this file in parallel
           const resolvedTags = await Promise.all(
-            MDNTags.map( async ( mdnTagObject ) => {
+            MDNTags.map(async (mdnTagObject) => {
               /**
                * Parallel tag resolution: Within each file, all MDN tags are resolved concurrently.
                * E.g., If a single Markdown file contains multiple MDN tags (like {#mdn "component1"#}
                * and {#mdn "component2"#}), they're rendered simultaneously.
                */
-              const replacementString = await resolveMDNComponent( mdnTagObject, debugFn );
+              const replacementString = await resolveMDNComponent(mdnTagObject, debugFn);
               return {
                 marker: mdnTagObject.marker,
                 replacement: replacementString
                   .trim()
-                  .replace( /\n{3,}/g, '\n\n' )
-                  .replace( /^\s+/gm, '' )
-                  .replace( /\s+$/gm, '' )
+                  .replace(/\n{3,}/g, '\n\n')
+                  .replace(/^\s+/gm, '')
+                  .replace(/\s+$/gm, '')
               };
-            } )
+            })
           );
 
           return { filename, resolvedTags };
-        } )
+        })
       );
 
       // Update all file contents
-      processedFiles.forEach( ( { filename, resolvedTags } ) => {
-        resolvedTags.forEach( ( { marker, replacement } ) => {
-          files[ filename ].contents = Buffer.from(
-            files[ filename ].contents.toString().replace( marker, replacement )
-          );
-        } );
-      } );
+      processedFiles.forEach(({ filename, resolvedTags }) => {
+        resolvedTags.forEach(({ marker, replacement }) => {
+          files[filename].contents = Buffer.from(files[filename].contents.toString().replace(marker, replacement));
+        });
+      });
 
       done();
-    } catch ( error ) {
-      done( error );
+    } catch (error) {
+      done(error);
     }
   };
 }
