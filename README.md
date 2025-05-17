@@ -7,13 +7,14 @@
 
 MDN is a Metalsmith plugin that lets you use Nunjucks in your markdown content. It enables the re-use of **section components**, the same components that you use in your page section templates can now be used in long text pages. Simply add the component props to the frontmatter of your markdown file and use the `mdn` tag to include the component in your markdown content.
 
-If you are new to the concept of **section components**, you can read more about it on the [Metalsmith Components Website](https://metalsmith-components.netlify.app/) and in this [blog post](https://www.glinka.co/blog/building-flexible-page-layouts/).
+If you are new to the concept of **section components**, you can read more about it on the [Metalsmith Components Website](https://metalsmith-components.netlify.app/) and in this [blog post](https://glinka.co/blog/building-flexible-page-layouts/).
 
 [![metalsmith:plugin][metalsmith-badge]][metalsmith-url]
 [![npm: version][npm-badge]][npm-url]
 [![license: MIT][license-badge]][license-url]
 [![test: coverage][coverage-badge]][coverage-url]
 [![ESM/CommonJS][modules-badge]][npm-url]
+[![Known Vulnerabilities](https://snyk.io/test/github/wernerglinka/metalsmith-mdn/badge.svg)](https://snyk.io/test/github/wernerglinka/metalsmith-mdn/badge)
 
 ## Installation
 
