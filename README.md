@@ -16,33 +16,22 @@ If you are new to the concept of **section components**, you can read more about
 [![ESM/CommonJS][modules-badge]][npm-url]
 [![Known Vulnerabilities](https://snyk.io/test/github/wernerglinka/metalsmith-mdn/badge.svg)](https://snyk.io/test/github/wernerglinka/metalsmith-mdn/badge)
 
-## Installation
+## Features
+- **ESM and CommonJS support**:
+  - ESM: `import MDN from 'metalsmith-mdn'`
+  - CommonJS: `const MDN = require('metalsmith-mdn')`
 
-NPM:
+## Installation
 
 ```
 npm install metalsmith-mdn
-```
-
-Yarn:
-
-```
-yarn add metalsmith-mdn
 ```
 
 ## Usage
 
 **Note:** This plugin must be run immediately before the markdown plugin.
 
-This plugin supports both ESM and CommonJS usage.
-
-### ESM (recommended)
-
 ```js
-import Metalsmith from 'metalsmith';
-import markdown from '@metalsmith/markdown';
-import MDN from 'metalsmith-mdn';
-
 Metalsmith(__dirname)
   // ...
   .use(
@@ -54,32 +43,6 @@ Metalsmith(__dirname)
   .use(markdown());
 // ...
 ```
-
-### CommonJS
-
-```js
-const Metalsmith = require('metalsmith');
-const markdown = require('@metalsmith/markdown');
-const MDN = require('metalsmith-mdn');
-
-Metalsmith(__dirname)
-  // ...
-  .use(
-    MDN({
-      templatesDir: 'layouts',
-      customFilters: 'nunjucks-filters.js'
-    })
-  )
-  .use(markdown());
-// ...
-```
-
-The plugin supports both ESM and CommonJS usage through dual package exporting. When published, it includes both formats:
-
-- ESM (`lib/index.js`): Used by default when importing in an ESM context
-- CommonJS (`lib/index.cjs`): Used when requiring in a CommonJS context
-
-The package follows the standard Metalsmith plugin structure with source code in the `src` directory and the built files in the `lib` directory.
 
 ### Options
 
