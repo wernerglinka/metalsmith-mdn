@@ -14,7 +14,7 @@ If you are new to the concept of **section components**, you can read more about
 [![license: MIT][license-badge]][license-url]
 [![test: coverage][coverage-badge]][coverage-url]
 [![ESM/CommonJS][modules-badge]][npm-url]
-[![Known Vulnerabilities](https://snyk.io/test/github/wernerglinka/metalsmith-mdn/badge.svg)](https://snyk.io/test/github/wernerglinka/metalsmith-mdn/badge)
+[![Known Vulnerabilities](https://snyk.io/test/npm/metalsmith-mdn/badge.svg)](https://snyk.io/test/npm/metalsmith-mdn)
 
 ## Features
 - **ESM and CommonJS support**:
