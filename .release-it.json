@@ -1,7 +1,8 @@
 {
   "hooks": {
-    "before:init": ["npm run lint", "npm test"],
+    "before:init": ["gh auth status", "npm run lint", "npm test"],
     "after:bump": "npx auto-changelog -p --commit-limit false --ignore-commit-pattern '^((dev|chore|ci):|Release)'",
+    "before:github:release": "export GITHUB_TOKEN=$(gh auth token)",
     "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
   },
   "git": {
@@ -12,6 +13,8 @@
   "npm": { "publish": false },
   "github": {
     "release": true,
-    "releaseName": "metalsmith-mdn ${version}"
+    "releaseName": "metalsmith-mdn ${version}",
+    "tokenRef": "GITHUB_TOKEN",
+    "autoGenerate": false
   }
 }
