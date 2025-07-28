@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-mdn",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MDN is a Metalsmith plugin that lets you use Nunjucks components in markdown content",
   "type": "module",
   "keywords": [
@@ -22,7 +22,11 @@
     "type": "git",
     "url": "git+https://github.com/wernerglinka/metalsmith-mdn.git"
   },
-  "files": ["lib", "LICENSE", "README.md"],
+  "files": [
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
   "directories": {
     "lib": "lib",
     "test": "test"
