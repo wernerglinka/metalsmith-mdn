@@ -1,0 +1,16 @@
+{
+  "include": ["src/**/*.js"],
+  "exclude": [
+    "lib/**/*",
+    "test/**/*",
+    "node_modules/**/*",
+    "coverage/**/*"
+  ],
+  "reporter": ["lcov", "text-summary", "html"],
+  "check-coverage": true,
+  "lines": 90,
+  "functions": 90,
+  "branches": 90,
+  "statements": 90,
+  "per-file": true
+}

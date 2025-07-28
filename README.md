@@ -12,14 +12,23 @@ If you are new to the concept of **section components**, you can read more about
 [![metalsmith:plugin][metalsmith-badge]][metalsmith-url]
 [![npm: version][npm-badge]][npm-url]
 [![license: MIT][license-badge]][license-url]
-[![test: coverage][coverage-badge]][coverage-url]
+[![coverage][coverage-badge]][coverage-url]
 [![ESM/CommonJS][modules-badge]][npm-url]
 [![Known Vulnerabilities](https://snyk.io/test/npm/metalsmith-mdn/badge.svg)](https://snyk.io/test/npm/metalsmith-mdn)
 
 ## Features
+
+- Process Nunjucks templates within Markdown content
+- Support for custom Nunjucks filters
 - **ESM and CommonJS support**:
   - ESM: `import MDN from 'metalsmith-mdn'`
   - CommonJS: `const MDN = require('metalsmith-mdn')`
+- **High Performance Parallel Processing:**
+  - Processes multiple files simultaneously
+  - Renders multiple MDN tags concurrently within each file
+  - Non-blocking template rendering for optimal performance
+- 100% test coverage with comprehensive test suite
+- Detailed error messaging for easier debugging
 
 ## Installation
 
@@ -182,27 +191,13 @@ To use this plugin with the Metalsmith CLI, add `metalsmith-mdn` to the `plugins
 }
 ```
 
-## Features
-
-- Process Nunjucks templates within Markdown content
-- Support for custom Nunjucks filters
-- Full ESM and CommonJS compatibility
-- **High Performance Parallel Processing:**
-  - Processes multiple files simultaneously
-  - Renders multiple MDN tags concurrently within each file
-  - Non-blocking template rendering for optimal performance
-- 100% test coverage with comprehensive test suite
-- Detailed error messaging for easier debugging
-
 ## Test Coverage
 
 This project maintains high statement and line coverage for the source code. Coverage is verified during the release process using the c8 coverage tool.
- 
 
 ## Author
 
 [werner@glinka.co](https://github.com/wernerglinka)
-
 
 ## License
 
