@@ -60,7 +60,7 @@ Metalsmith(__dirname)
 | `templatesDir`  | `layouts`             | The directory where your Nunjucks templates are stored, relative to the Metalsmith root |
 | `customFilters` | `nunjucks-filters.js` | The filename of a custom Nunjucks filter file, located in the Metalsmith root directory |
 
-### Example
+### Examples
 
 To add a section component to your markdown content, use the `mdn` tag and pass unique tag name and props as arguments.
 

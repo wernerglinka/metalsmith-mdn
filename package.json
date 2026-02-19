@@ -12,7 +12,6 @@
   ],
   "main": "lib/index.cjs",
   "module": "lib/index.js",
-  "source": "src/index.js",
   "exports": {
     "import": "./lib/index.js",
     "require": "./lib/index.cjs",
