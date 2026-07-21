@@ -38,6 +38,12 @@ const normalizeOptions = (options) => {
  */
 function getMDNTags(fileObj, debugFn) {
   const mdnTagsArray = [];
+
+  // Guard against files whose contents are missing or not a Buffer
+  if (!Buffer.isBuffer(fileObj.contents)) {
+    return mdnTagsArray;
+  }
+
   const str = fileObj.contents.toString();
 
   // scan for MDN tags in the file content

@@ -13,15 +13,13 @@ If you are new to the concept of **section components**, you can read more about
 [![npm: version][npm-badge]][npm-url]
 [![license: MIT][license-badge]][license-url]
 [![coverage][coverage-badge]][coverage-url]
-[![ESM/CommonJS][modules-badge]][npm-url]
+[![ESM][modules-badge]][npm-url]
 
 ## Features
 
 - Process Nunjucks templates within Markdown content
 - Support for custom Nunjucks filters
-- **ESM and CommonJS support**:
-  - ESM: `import MDN from 'metalsmith-mdn'`
-  - CommonJS: `const MDN = require('metalsmith-mdn')`
+- **ESM-only**, requires Node >= 22. CommonJS consumers can `require()` it via Node 22's `require(esm)` support.
 - **High Performance Parallel Processing:**
   - Processes multiple files simultaneously
   - Renders multiple MDN tags concurrently within each file
@@ -35,12 +33,18 @@ If you are new to the concept of **section components**, you can read more about
 npm install metalsmith-mdn
 ```
 
+This package is ESM-only and requires Node >= 22. CommonJS projects on Node 22 can still consume it with `require('metalsmith-mdn')` thanks to Node's `require(esm)` support.
+
 ## Usage
 
 **Note:** This plugin must be run immediately before the markdown plugin.
 
 ```js
-Metalsmith(__dirname)
+import Metalsmith from 'metalsmith';
+import MDN from 'metalsmith-mdn';
+import markdown from '@metalsmith/markdown';
+
+Metalsmith(import.meta.dirname)
   // ...
   .use(
     MDN({
@@ -192,7 +196,7 @@ To use this plugin with the Metalsmith CLI, add `metalsmith-mdn` to the `plugins
 
 ## Test Coverage
 
-This project maintains high statement and line coverage for the source code. Coverage is verified during the release process using the c8 coverage tool.
+This project maintains high statement and line coverage for the source code. Coverage is measured with Node's native test runner (`node --test --experimental-test-coverage`).
 
 ## Author
 
@@ -210,4 +214,4 @@ This project maintains high statement and line coverage for the source code. Cov
 [license-url]: LICENSE
 [coverage-badge]: https://img.shields.io/badge/test%20coverage-100%25-brightgreen
 [coverage-url]: #test-coverage
-[modules-badge]: https://img.shields.io/badge/modules-ESM%2FCJS-blue
+[modules-badge]: https://img.shields.io/badge/module-ESM-blue

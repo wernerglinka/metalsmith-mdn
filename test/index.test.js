@@ -1,9 +1,8 @@
-/* eslint-env node,mocha */
-import assert from 'node:assert';
-import { resolve, dirname } from 'node:path';
-import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { describe, it } from 'node:test';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import equals from 'assert-dir-equal';
 import Metalsmith from 'metalsmith';
 // Import from source directly for testing
 import plugin from '../src/index.js';
@@ -13,6 +12,41 @@ const { name } = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 
 
 function fixture(p) {
   return resolve(__dirname, 'fixtures', p);
+}
+
+/**
+ * Recursively list files in a directory, relative to it.
+ * @param {string} dir
+ * @returns {string[]}
+ */
+function listFiles(dir) {
+  const out = [];
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) {
+      out.push(...listFiles(full).map((f) => join(entry, f)));
+    } else {
+      out.push(entry);
+    }
+  }
+  return out.sort();
+}
+
+/**
+ * Assert that two directory trees contain the same files with the same contents.
+ * Replaces the former assert-dir-equal dependency.
+ * @param {string} actualDir
+ * @param {string} expectedDir
+ */
+function assertDirEqual(actualDir, expectedDir) {
+  const actualFiles = listFiles(actualDir);
+  const expectedFiles = listFiles(expectedDir);
+  assert.deepEqual(actualFiles, expectedFiles, `File lists differ between ${actualDir} and ${expectedDir}`);
+  for (const file of expectedFiles) {
+    const actual = readFileSync(join(actualDir, file), 'utf8');
+    const expected = readFileSync(join(expectedDir, file), 'utf8');
+    assert.strictEqual(actual, expected, `Contents differ for ${file}`);
+  }
 }
 
 /**
@@ -32,16 +66,14 @@ function normalizeContent(content) {
     .replace(/^\s+|\s+$/gm, ''); // Trim each line
 }
 
-describe('metalsmith-mdn', function () {
-  this.timeout(5000);
-
+describe('metalsmith-mdn', () => {
   it('should export a named plugin function matching package.json name', () => {
     const namechars = name.split('-')[1];
     const allUpperCase = namechars.toUpperCase();
     assert.strictEqual(plugin().name, allUpperCase);
   });
 
-  it('should handle no MDN markers', (done) => {
+  it('should handle no MDN markers', (_t, done) => {
     Metalsmith(fixture('noMarkers'))
       .use(plugin())
       .build((err) => {
@@ -49,12 +81,12 @@ describe('metalsmith-mdn', function () {
           done(err);
         }
         assert.strictEqual(err, null);
-        equals(fixture('noMarkers/build'), fixture('noMarkers/expected'));
+        assertDirEqual(fixture('noMarkers/build'), fixture('noMarkers/expected'));
         done();
       });
   });
 
-  it('should handle invalid MDN components', (done) => {
+  it('should handle invalid MDN components', (_t, done) => {
     Metalsmith(fixture('invalidComponent'))
       .use(plugin())
       .build((err) => {
@@ -62,12 +94,12 @@ describe('metalsmith-mdn', function () {
           done(err);
         }
         assert.strictEqual(err, null);
-        equals(fixture('invalidComponent/build'), fixture('invalidComponent/expected'));
+        assertDirEqual(fixture('invalidComponent/build'), fixture('invalidComponent/expected'));
         done();
       });
   });
 
-  it('should not crash the metalsmith build when using default options', (done) => {
+  it('should not crash the metalsmith build when using default options', (_t, done) => {
     Metalsmith(fixture('default'))
       .use(plugin())
       .build((err) => {
@@ -75,12 +107,12 @@ describe('metalsmith-mdn', function () {
           done(err);
         }
         assert.strictEqual(err, null);
-        equals(fixture('default/build'), fixture('default/expected'));
+        assertDirEqual(fixture('default/build'), fixture('default/expected'));
         done();
       });
   });
 
-  it('should replace marker with nunjucks component', (done) => {
+  it('should replace marker with nunjucks component', (_t, done) => {
     Metalsmith(fixture('insertNunjucks'))
       .use(
         plugin({
@@ -93,12 +125,12 @@ describe('metalsmith-mdn', function () {
           done(err);
         }
         assert.strictEqual(err, null);
-        equals(fixture('insertNunjucks/build'), fixture('insertNunjucks/expected'));
+        assertDirEqual(fixture('insertNunjucks/build'), fixture('insertNunjucks/expected'));
         done();
       });
   });
 
-  it('should handle multiple MDN markers in a single file', (done) => {
+  it('should handle multiple MDN markers in a single file', (_t, done) => {
     Metalsmith(fixture('multipleMarkers'))
       .use(
         plugin({
@@ -123,7 +155,7 @@ describe('metalsmith-mdn', function () {
       });
   });
 
-  it('should apply custom nunjucks filters correctly', (done) => {
+  it('should apply custom nunjucks filters correctly', (_t, done) => {
     Metalsmith(fixture('customFilters'))
       .use(
         plugin({
@@ -153,7 +185,7 @@ describe('metalsmith-mdn', function () {
       });
   });
 
-  it('should handle MDN tags with special characters in component names', (done) => {
+  it('should handle MDN tags with special characters in component names', (_t, done) => {
     // Create a test file with a component that has special characters in its name
     const ms = Metalsmith(fixture('multipleMarkers')).metadata({
       'special@component-name!': {
@@ -207,7 +239,7 @@ describe('metalsmith-mdn', function () {
       });
   });
 
-  it('should handle large files with many MDN tags efficiently', (done) => {
+  it('should handle large files with many MDN tags efficiently', (_t, done) => {
     // Create a metalsmith instance
     const ms = Metalsmith(fixture('multipleMarkers')).source('src').destination('build');
 
@@ -293,7 +325,7 @@ describe('metalsmith-mdn', function () {
     });
   });
 
-  it('should handle template not found errors gracefully', (done) => {
+  it('should handle template not found errors gracefully', (_t, done) => {
     // Create a metalsmith instance with a component referencing a non-existent template
     const ms = Metalsmith(fixture('multipleMarkers'))
       .source('src')
@@ -333,7 +365,7 @@ describe('metalsmith-mdn', function () {
     });
   });
 
-  it('should handle custom filters import failure gracefully', (done) => {
+  it('should handle custom filters import failure gracefully', (_t, done) => {
     // Try to use a non-existent filters file
     Metalsmith(fixture('multipleMarkers'))
       .use(
