@@ -35,7 +35,7 @@
     "depcheck": "^1.4.7",
     "marked": "^16.4.2",
     "metalsmith": "^2.5.0",
-    "release-it": "^20.0.0"
+    "release-it": "^21.0.1"
   },
   "scripts": {
     "changelog": "auto-changelog -u --commit-limit false --ignore-commit-pattern '^((dev|chore|ci):|Release)'",
