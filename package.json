@@ -33,7 +33,7 @@
     "@biomejs/biome": "^2.4.0",
     "auto-changelog": "^2.5.0",
     "depcheck": "^1.4.7",
-    "marked": "^16.4.2",
+    "marked": "^18.0.14",
     "metalsmith": "^2.5.0",
     "release-it": "^20.0.0"
   },
